@@ -1,13 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-
-long long int iterative(long long int n)
+long long int iterativeCore(long long int nThTerm)
 {
-   if (n == 0)
+   if (nThTerm == 0)
    {
       return 0;
    }
-   else if(n == 1)
+   else if (nThTerm == 1)
    {
       return 1;
    }
@@ -15,132 +15,116 @@ long long int iterative(long long int n)
    long long int current = 1;
    long long int prev = 0;
    long long int next = 0;
-   for(int i = 1; i < n; ++i)
+   for (int i = 1; i < nThTerm; ++i)
    {
       next = prev + current;
       prev = current;
       current = next;
    }
    return current;
-
 }
 
-long long int recursion(long long int n)
+long long int recursionCore(long long int nThTerm)
 {
-   if(n == 0)
+   if (nThTerm == 0)
    {
       return 0;
    }
-   else if (n == 1)
+   else if (nThTerm == 1)
    {
       return 1;
    }
    else
    {
-      return recursion(n-1) + recursion(n-2);
+      return recursionCore(nThTerm - 1) + recursionCore(nThTerm - 2);
    }
-
-
 }
 
-//https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Iterative-Fibonacci.html
-// helped with understanding iterative fib again
+// https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Iterative-Fibonacci.html
+//  helped with understanding iterativeCore fib again
 
+long long int iterative_term[5000] = {0}; // 5000 lowkey high and makes it slightly slower
 
-long long int iterative_term[5000] = {0}; //5000 lowkey high and makes it slightly slower
-
-long long int fib_Iterative_Wrapper(long long int n)
+long long int fibIterativeWrapper(long long int nThTerm)
 {
-      if (n == 0)
+   if (nThTerm == 0)
    {
-      return n;
+      return nThTerm;
    }
 
-   if(iterative_term[n] != 0)
+   if (iterative_term[nThTerm] != 0)
    {
-      return iterative_term[n];
+      return iterative_term[nThTerm];
    }
    else
    {
-      iterative_term[n] = iterative(n);
-      return iterative(n);
-
+      iterative_term[nThTerm] = iterativeCore(nThTerm);
+      return iterativeCore(nThTerm);
    }
-
-
 }
 
 long long int recursive_term[5000] = {0};
 
-long long int fib_Recursive_Wrapper(long long int n)
+long long int fibRecursiveWrapper(long long int nThTerm)
 {
-   if (n == 0)
+   if (nThTerm == 0)
    {
-      return n;
+      return nThTerm;
    }
-   else if (n==1)
+   else if (nThTerm == 1)
    {
-      return n;
+      return nThTerm;
    }
 
-
-   if (recursive_term[n])
+   if (recursive_term[nThTerm])
    {
-      return recursive_term[n];
+      return recursive_term[nThTerm];
    }
    else
    {
-      recursive_term[n] = fib_Recursive_Wrapper(n-1) + fib_Recursive_Wrapper(n-2);
-      return recursive_term[n];
+      recursive_term[nThTerm] = fibRecursiveWrapper(nThTerm - 1) + fibRecursiveWrapper(nThTerm - 2);
+      return recursive_term[nThTerm];
    }
-
 }
 
+int main(int argc, char *argv[])
+{
+   if (argc < 4)
+   {
+      printf("Too many arguments, only need int, r/i, and filename\nThTerm");
+      exit(EXIT_FAILURE);
+   }
 
-
-
-int main(int argc, char *argv[]) {
-
-   int  commandLineInt = 0;
+   int commandLineInt = 0;
    sscanf(argv[1], "%d", &commandLineInt);
-   //https://www.geeksforgeeks.org/c-program-for-char-to-int-conversion/
+   // https://www.geeksforgeeks.org/c-program-for-char-to-int-conversion/
 
    char fibOption = *argv[2];
    char *filename = argv[3];
 
-
-   //scanf("%s", filename);
-   FILE *file = fopen(filename, "r"); 
+   // scanf("%s", filename);
+   FILE *file = fopen(filename, "r");
    // https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm
-
 
    int fileInteger;
    fscanf(file, "%d", &fileInteger);
-   //https://www.tutorialspoint.com/c_standard_library/c_function_fscanf.htm
+   // https://www.tutorialspoint.com/c_standard_library/c_function_fscanf.htm
    fclose(file);
 
-   long long int n = 0;
-   n = commandLineInt + fileInteger -1; 
+   long long int nThTerm = 0;
+   nThTerm = commandLineInt + fileInteger - 1;
    // -1 cuz fib has to start at 0
 
-
-
-
    long long int result = 0;
- 
-   if(fibOption == 'i')
+
+   if (fibOption == 'i')
    {
-      result = fib_Iterative_Wrapper(n);
+      result = fibIterativeWrapper(nThTerm);
    }
-   else if(fibOption == 'r')
+   else if (fibOption == 'r')
    {
-      result = fib_Recursive_Wrapper(n);
+      result = fibRecursiveWrapper(nThTerm);
    }
 
    printf("%lld\n", result);
-
-
-
-
-
 }
