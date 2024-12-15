@@ -89,31 +89,34 @@ long long int fibRecursiveWrapper(long long int nThTerm)
 
 int main(int argc, char *argv[])
 {
-   if (argc < 4)
+   if (argc < 3)
    {
-      printf("Too many arguments, only need int, r/i, and filename\nThTerm");
+      printf("Too few arguments, only need int, r/i, and filename\nThTerm");
       exit(EXIT_FAILURE);
    }
 
    int commandLineInt = 0;
    sscanf(argv[1], "%d", &commandLineInt);
-   // https://www.geeksforgeeks.org/c-program-for-char-to-int-conversion/
 
    char fibOption = *argv[2];
-   char *filename = argv[3];
+   /*
+      char *filename = "test.txt";
 
-   // scanf("%s", filename);
-   FILE *file = fopen(filename, "r");
-   // https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm
+      if (argc >= 4)
+      {
+         filename = argv[3];
+      }
 
-   int fileInteger;
-   fscanf(file, "%d", &fileInteger);
-   // https://www.tutorialspoint.com/c_standard_library/c_function_fscanf.htm
-   fclose(file);
+      FILE *file = fopen(filename, "r");
 
+      int fileInteger;
+      fscanf(file, "%d", &fileInteger);
+
+      fclose(file);
+      //Re-add for test.txt if needed
+   */
    long long int nThTerm = 0;
-   nThTerm = commandLineInt + fileInteger - 1;
-   // -1 cuz fib has to start at 0
+   nThTerm = commandLineInt - 1; //+ fileInteger - 1; // add this too if test.txt is added again
 
    long long int result = 0;
 
